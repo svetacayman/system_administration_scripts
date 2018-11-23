@@ -1,0 +1,1 @@
+wmic /node:"hostname with hiphen needs quotes" process call create "msiexec.exe /i \\hostname\path\to\file\file.msi /qn"
