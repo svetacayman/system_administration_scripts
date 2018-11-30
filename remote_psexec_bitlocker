@@ -1,0 +1,21 @@
+# all manage-bde commands require cmd.exe to be run as administrator
+Psexec.exe \\pcname Manage-bde –protectors –add –recoverypassword c:
+#note the recovery password and TPN ID and save it somewhere outside the pc on which you are encrypting hard drive. 
+Psexec.exe \\pcname Manage-bde –on  c: –usedspaceonly
+#it  will ask for restart
+psexec.exe \\pcname shutdown /r
+# after restart watch the process of encrypting:
+Psexec.exe \\pcname Manage-bde –status
+
+#To re create a recovery pass:
+#1. Suspend BitLocker Protection :
+manage-bde -protectors -disable %systemdrive%
+# 2. Delete Recovery Password :
+manage-bde -protectors -delete %systemdrive% -type RecoveryPassword
+# 3. Add a new Recovery Password :
+manage-bde -protectors -add %systemdrive% -RecoveryPassword
+# 4. Backup the new Recovery Password :
+manage-bde -protectors -adbackup %systemdrive% -ID KeyProtectorID
+# 5. Enable BitLocker Protection :
+manage-bde -protectors -enable %systemdrive%
+# note that if you store recovery pass in AD DS, you will see the old and the new. When recovering use the one with lates date.
